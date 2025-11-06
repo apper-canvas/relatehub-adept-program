@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 
-const Header = ({ onAddContact, onAddDeal, onAddTask }) => {
+const Header = ({ onAddContact, onAddDeal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,9 +23,6 @@ const Header = ({ onAddContact, onAddDeal, onAddTask }) => {
     }
     if (currentPath === "/pipeline") {
       return { text: "Add Deal", action: onAddDeal, icon: "Plus" };
-    }
-    if (currentPath === "/tasks") {
-      return { text: "Add Task", action: onAddTask, icon: "Plus" };
     }
     return { text: "Quick Add", action: onAddContact, icon: "Plus" };
   };
