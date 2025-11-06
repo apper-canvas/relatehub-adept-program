@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { format, subDays } from "date-fns";
+import Chart from "react-apexcharts";
 import { alertService } from "@/services/api/alertService";
 import AlertBanner from "@/components/molecules/AlertBanner";
 import { toast } from "react-toastify";
@@ -16,11 +17,17 @@ import { taskService } from "@/services/api/taskService";
 import { activityService } from "@/services/api/activityService";
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({
+const [stats, setStats] = useState({
     totalContacts: 0,
     totalDeals: 0,
     pipelineValue: 0,
     completedTasks: 0,
+  });
+  const [chartData, setChartData] = useState({
+    pipelineValue: [],
+    dealStages: [],
+    winRate: [],
+    progression: []
   });
   const [recentActivities, setRecentActivities] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -30,7 +37,7 @@ const Dashboard = () => {
     loadDashboardData();
   }, []);
 
-  const loadDashboardData = async () => {
+const loadDashboardData = async () => {
     setIsLoading(true);
     setError("");
     
@@ -55,6 +62,10 @@ try {
         completedTasks,
       });
 
+      // Calculate chart data
+      const chartMetrics = calculateChartData(deals);
+      setChartData(chartMetrics);
+
       // Get recent activities (last 10)
       const sortedActivities = activities
         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
@@ -68,6 +79,56 @@ try {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const calculateChartData = (deals) => {
+    // Pipeline Value Trends (last 6 months)
+    const months = [];
+    const pipelineValues = [];
+    for (let i = 5; i >= 0; i--) {
+      const date = subDays(new Date(), i * 30);
+      months.push(format(date, 'MMM'));
+      const monthDeals = deals.filter(deal => 
+        new Date(deal.createdAt) <= date && !["Won", "Lost"].includes(deal.stage)
+      );
+      pipelineValues.push(monthDeals.reduce((sum, deal) => sum + deal.value, 0));
+    }
+
+    // Deal Stages Distribution
+    const stageGroups = deals.reduce((acc, deal) => {
+      acc[deal.stage] = (acc[deal.stage] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Win Rate Analysis
+    const totalClosed = deals.filter(deal => ["Won", "Lost"].includes(deal.stage)).length;
+    const won = deals.filter(deal => deal.stage === "Won").length;
+    const lost = deals.filter(deal => deal.stage === "Lost").length;
+    
+    // Deal Progression Funnel
+    const stages = ["Lead", "Qualified", "Proposal", "Negotiation", "Won"];
+    const funnelData = stages.map(stage => 
+      deals.filter(deal => deal.stage === stage).length
+    );
+
+    return {
+      pipelineValue: {
+        categories: months,
+        series: [{ name: 'Pipeline Value', data: pipelineValues }]
+      },
+      dealStages: {
+        labels: Object.keys(stageGroups),
+        series: Object.values(stageGroups)
+      },
+      winRate: {
+        categories: ['Won', 'Lost'],
+        series: [{ name: 'Deals', data: [won, lost] }]
+      },
+      progression: {
+        categories: stages,
+        series: [{ name: 'Deals', data: funnelData }]
+      }
+    };
   };
 
   const handleDismissAlert = async (alertId) => {
@@ -153,6 +214,200 @@ try {
           trend
         />
       </div>
+
+{/* Analytics Charts */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="mb-8"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">Analytics Overview</h2>
+          <ApperIcon name="BarChart3" className="h-6 w-6 text-primary" />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Pipeline Value Trends */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Pipeline Value Trends</h3>
+              <ApperIcon name="TrendingUp" className="h-5 w-5 text-success" />
+            </div>
+            <Chart
+              options={{
+                chart: {
+                  type: 'line',
+                  toolbar: { show: false },
+                  fontFamily: 'Inter, sans-serif'
+                },
+                stroke: {
+                  curve: 'smooth',
+                  width: 3
+                },
+                colors: ['#2563EB'],
+                xaxis: {
+                  categories: chartData.pipelineValue.categories,
+                  labels: {
+                    style: { colors: '#6B7280', fontSize: '12px' }
+                  }
+                },
+                yaxis: {
+                  labels: {
+                    formatter: (val) => `$${(val / 1000).toFixed(0)}K`,
+                    style: { colors: '#6B7280', fontSize: '12px' }
+                  }
+                },
+                grid: {
+                  strokeDashArray: 4,
+                  borderColor: '#E5E7EB'
+                },
+                tooltip: {
+                  y: {
+                    formatter: (val) => `$${val.toLocaleString()}`
+                  }
+                }
+              }}
+              series={chartData.pipelineValue.series}
+              type="line"
+              height={200}
+            />
+          </div>
+
+          {/* Deal Stage Distribution */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Deal Distribution</h3>
+              <ApperIcon name="PieChart" className="h-5 w-5 text-primary" />
+            </div>
+            <Chart
+              options={{
+                chart: {
+                  type: 'donut',
+                  fontFamily: 'Inter, sans-serif'
+                },
+                labels: chartData.dealStages.labels,
+                colors: ['#2563EB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+                legend: {
+                  position: 'bottom',
+                  fontSize: '12px',
+                  labels: { colors: '#6B7280' }
+                },
+                plotOptions: {
+                  pie: {
+                    donut: {
+                      size: '60%'
+                    }
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                }
+              }}
+              series={chartData.dealStages.series}
+              type="donut"
+              height={200}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Win Rate Analysis */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Win Rate Analysis</h3>
+              <ApperIcon name="Target" className="h-5 w-5 text-success" />
+            </div>
+            <Chart
+              options={{
+                chart: {
+                  type: 'bar',
+                  toolbar: { show: false },
+                  fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#10B981', '#EF4444'],
+                xaxis: {
+                  categories: chartData.winRate.categories,
+                  labels: {
+                    style: { colors: '#6B7280', fontSize: '12px' }
+                  }
+                },
+                yaxis: {
+                  labels: {
+                    style: { colors: '#6B7280', fontSize: '12px' }
+                  }
+                },
+                grid: {
+                  strokeDashArray: 4,
+                  borderColor: '#E5E7EB'
+                },
+                plotOptions: {
+                  bar: {
+                    borderRadius: 4,
+                    horizontal: false
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                }
+              }}
+              series={chartData.winRate.series}
+              type="bar"
+              height={200}
+            />
+          </div>
+
+          {/* Deal Progression Funnel */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Deal Progression</h3>
+              <ApperIcon name="Filter" className="h-5 w-5 text-primary" />
+            </div>
+            <Chart
+              options={{
+                chart: {
+                  type: 'bar',
+                  toolbar: { show: false },
+                  fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#2563EB'],
+                xaxis: {
+                  categories: chartData.progression.categories,
+                  labels: {
+                    style: { colors: '#6B7280', fontSize: '12px' }
+                  }
+                },
+                yaxis: {
+                  labels: {
+                    style: { colors: '#6B7280', fontSize: '12px' }
+                  }
+                },
+                grid: {
+                  strokeDashArray: 4,
+                  borderColor: '#E5E7EB'
+                },
+                plotOptions: {
+                  bar: {
+                    borderRadius: 4,
+                    horizontal: true
+                  }
+                },
+                dataLabels: {
+                  enabled: true,
+                  style: {
+                    colors: ['#FFFFFF'],
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                  }
+                }
+              }}
+              series={chartData.progression.series}
+              type="bar"
+              height={200}
+            />
+          </div>
+        </div>
+      </motion.div>
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
