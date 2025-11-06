@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 
-const Header = ({ onAddContact, onAddDeal }) => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -16,18 +16,7 @@ const Header = ({ onAddContact, onAddDeal }) => {
     { name: "Tasks", path: "/tasks", icon: "CheckSquare" },
   ];
 
-  const getQuickAddAction = () => {
-    const currentPath = location.pathname;
-    if (currentPath === "/contacts") {
-      return { text: "Add Contact", action: onAddContact, icon: "UserPlus" };
-    }
-    if (currentPath === "/pipeline") {
-      return { text: "Add Deal", action: onAddDeal, icon: "Plus" };
-    }
-    return { text: "Quick Add", action: onAddContact, icon: "Plus" };
-  };
 
-  const quickAdd = getQuickAddAction();
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
@@ -65,14 +54,7 @@ const Header = ({ onAddContact, onAddDeal }) => {
           </nav>
 
           {/* Quick Add Button */}
-          <div className="flex items-center space-x-4">
-            <Button
-              onClick={quickAdd.action}
-              className="hidden sm:inline-flex items-center space-x-2"
-            >
-              <ApperIcon name={quickAdd.icon} className="h-4 w-4" />
-              <span>{quickAdd.text}</span>
-            </Button>
+<div className="flex items-center space-x-4">
 
             {/* Mobile Menu Button */}
             <button
@@ -110,18 +92,6 @@ const Header = ({ onAddContact, onAddDeal }) => {
                   </Link>
                 );
               })}
-              <div className="pt-2 border-t border-gray-200">
-                <Button
-                  onClick={() => {
-                    quickAdd.action();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full justify-center"
-                >
-                  <ApperIcon name={quickAdd.icon} className="h-4 w-4 mr-2" />
-                  {quickAdd.text}
-                </Button>
-              </div>
             </div>
           </motion.div>
         )}
