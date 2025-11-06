@@ -1,16 +1,17 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
-import SearchBar from "@/components/molecules/SearchBar";
-import ContactCard from "@/components/molecules/ContactCard";
-import ContactModal from "@/components/organisms/ContactModal";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { contactService } from "@/services/api/contactService";
 import { activityService } from "@/services/api/activityService";
 import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import ContactModal from "@/components/organisms/ContactModal";
+import ContactDetailsModal from "@/components/organisms/ContactDetailsModal";
+import ContactCard from "@/components/molecules/ContactCard";
+import SearchBar from "@/components/molecules/SearchBar";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -18,8 +19,10 @@ const Contacts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedContact, setSelectedContact] = useState(null);
+const [selectedContact, setSelectedContact] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [detailsContact, setDetailsContact] = useState(null);
 
   useEffect(() => {
     loadContacts();
@@ -146,9 +149,9 @@ const Contacts = () => {
     }
   };
 
-  const handleViewDetails = (contact) => {
-    // Future implementation for contact details view
-    toast.info("Contact details view coming soon!");
+const handleViewDetails = (contact) => {
+    setDetailsContact(contact);
+    setDetailsModalOpen(true);
   };
 
   if (isLoading) return <Loading />;
@@ -236,11 +239,17 @@ const Contacts = () => {
       )}
 
       {/* Contact Modal */}
-      <ContactModal
+<ContactModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         contact={selectedContact}
         onSave={handleSaveContact}
+      />
+
+      <ContactDetailsModal
+        isOpen={detailsModalOpen}
+        onClose={() => setDetailsModalOpen(false)}
+        contact={detailsContact}
       />
     </div>
   );
