@@ -8,7 +8,7 @@ import { contactService } from "@/services/api/contactService";
 import { dealService } from "@/services/api/dealService";
 import { taskService } from "@/services/api/taskService";
 import { activityService } from "@/services/api/activityService";
-
+import { alertService } from "@/services/api/alertService";
 const Layout = () => {
   const [modals, setModals] = useState({
     contact: { isOpen: false, data: null },

@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { format, subDays } from "date-fns";
+import { alertService } from "@/services/api/alertService";
+import AlertBanner from "@/components/molecules/AlertBanner";
+import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import StatsCard from "@/components/molecules/StatsCard";
 import ActivityItem from "@/components/molecules/ActivityItem";
@@ -20,9 +23,9 @@ const Dashboard = () => {
     completedTasks: 0,
   });
   const [recentActivities, setRecentActivities] = useState([]);
+  const [alerts, setAlerts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-
   useEffect(() => {
     loadDashboardData();
   }, []);
@@ -31,12 +34,13 @@ const Dashboard = () => {
     setIsLoading(true);
     setError("");
     
-    try {
-      const [contacts, deals, tasks, activities] = await Promise.all([
+try {
+      const [contacts, deals, tasks, activities, alertsData] = await Promise.all([
         contactService.getAll(),
         dealService.getAll(),
         taskService.getAll(),
         activityService.getAll(),
+        alertService.getAll(),
       ]);
 
       // Calculate stats
@@ -57,11 +61,36 @@ const Dashboard = () => {
         .slice(0, 10);
 
       setRecentActivities(sortedActivities);
+      setAlerts(alertsData);
     } catch (err) {
       setError("Failed to load dashboard data");
       console.error("Dashboard error:", err);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDismissAlert = async (alertId) => {
+    try {
+      await alertService.dismissAlert(alertId);
+      setAlerts(prev => prev.filter(alert => alert.Id !== alertId));
+      toast.success("Alert dismissed");
+    } catch (err) {
+      console.error("Dismiss alert error:", err);
+      toast.error("Failed to dismiss alert");
+    }
+  };
+
+  const handleCompleteTask = async (taskId) => {
+    try {
+      await alertService.completeTask(taskId);
+      setAlerts(prev => prev.filter(alert => alert.taskId !== taskId));
+      // Refresh stats to reflect completed task
+      loadDashboardData();
+      toast.success("Task completed successfully");
+    } catch (err) {
+      console.error("Complete task error:", err);
+      toast.error("Failed to complete task");
     }
   };
 
@@ -206,6 +235,14 @@ const Dashboard = () => {
             </div>
           </motion.div>
 
+{/* Alerts Banner */}
+          <AlertBanner
+            alerts={alerts}
+            onDismiss={handleDismissAlert}
+            onCompleteTask={handleCompleteTask}
+            className="col-span-full"
+          />
+
           {/* Today's Tasks */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -221,15 +258,15 @@ const Dashboard = () => {
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-error"></div>
-                <span className="text-gray-600">3 overdue tasks</span>
+                <span className="text-gray-600">{alerts.filter(a => a.type === 'task_overdue').length} overdue tasks</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-warning"></div>
-                <span className="text-gray-600">5 follow-ups due</span>
+                <span className="text-gray-600">{alerts.filter(a => a.type === 'contact_follow_up').length} follow-ups due</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-success"></div>
-                <span className="text-gray-600">2 deals closing</span>
+                <span className="text-gray-600">{alerts.filter(a => a.type === 'task_due_today').length} tasks due today</span>
               </div>
             </div>
           </motion.div>
