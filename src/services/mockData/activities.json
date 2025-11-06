@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 1,
+    "contactId": 1,
+    "dealId": 1,
+    "type": "call",
+    "description": "Initial discovery call - discussed current pain points and requirements",
+    "timestamp": "2024-02-15T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "contactId": 1,
+    "dealId": 1,
+    "type": "email",
+    "description": "Sent detailed proposal with pricing breakdown and implementation timeline",
+    "timestamp": "2024-02-14T14:45:00Z"
+  },
+  {
+    "Id": 3,
+    "contactId": 2,
+    "dealId": 2,
+    "type": "meeting",
+    "description": "Product demo session - showcased automation features and reporting capabilities",
+    "timestamp": "2024-02-13T15:30:00Z"
+  },
+  {
+    "Id": 4,
+    "contactId": 3,
+    "dealId": 3,
+    "type": "note",
+    "description": "Follow-up on pricing concerns - prepared custom package for startup budget",
+    "timestamp": "2024-02-12T11:20:00Z"
+  },
+  {
+    "Id": 5,
+    "contactId": 4,
+    "dealId": 4,
+    "type": "meeting",
+    "description": "Stakeholder meeting with IT team to discuss technical requirements",
+    "timestamp": "2024-02-11T09:00:00Z"
+  },
+  {
+    "Id": 6,
+    "contactId": 5,
+    "dealId": 5,
+    "type": "call",
+    "description": "Discussed integration with existing design tools and workflow requirements",
+    "timestamp": "2024-02-10T16:15:00Z"
+  },
+  {
+    "Id": 7,
+    "contactId": 6,
+    "dealId": 6,
+    "type": "email",
+    "description": "Sent compliance documentation and security certifications",
+    "timestamp": "2024-02-09T13:45:00Z"
+  },
+  {
+    "Id": 8,
+    "contactId": 1,
+    "dealId": 7,
+    "type": "deal",
+    "description": "Deal closed: TechCorp Additional Licenses - $35,000",
+    "timestamp": "2024-02-01T16:20:00Z"
+  },
+  {
+    "Id": 9,
+    "contactId": 2,
+    "dealId": null,
+    "type": "note",
+    "description": "Contact updated: Michael Chen",
+    "timestamp": "2024-01-25T11:20:00Z"
+  },
+  {
+    "Id": 10,
+    "contactId": 3,
+    "dealId": null,
+    "type": "note",
+    "description": "New contact added: Emily Rodriguez",
+    "timestamp": "2024-01-22T16:00:00Z"
+  }
+]

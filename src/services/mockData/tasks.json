@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 1,
+    "contactId": 1,
+    "title": "Follow up on contract negotiation points",
+    "dueDate": "2024-02-18",
+    "completed": false,
+    "createdAt": "2024-02-15T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "contactId": 2,
+    "title": "Send updated proposal with revised pricing",
+    "dueDate": "2024-02-17",
+    "completed": false,
+    "createdAt": "2024-02-14T14:45:00Z"
+  },
+  {
+    "Id": 3,
+    "contactId": 3,
+    "title": "Schedule product demo for startup team",
+    "dueDate": "2024-02-19",
+    "completed": false,
+    "createdAt": "2024-02-12T11:20:00Z"
+  },
+  {
+    "Id": 4,
+    "contactId": 4,
+    "title": "Prepare technical documentation for IT review",
+    "dueDate": "2024-02-20",
+    "completed": false,
+    "createdAt": "2024-02-11T09:00:00Z"
+  },
+  {
+    "Id": 5,
+    "contactId": 5,
+    "title": "Create custom integration plan for design workflow",
+    "dueDate": "2024-02-16",
+    "completed": true,
+    "createdAt": "2024-02-10T16:15:00Z"
+  },
+  {
+    "Id": 6,
+    "contactId": 6,
+    "title": "Schedule compliance review meeting",
+    "dueDate": "2024-02-21",
+    "completed": false,
+    "createdAt": "2024-02-09T13:45:00Z"
+  },
+  {
+    "Id": 7,
+    "contactId": 1,
+    "title": "Send implementation timeline and resource requirements",
+    "dueDate": "2024-02-14",
+    "completed": true,
+    "createdAt": "2024-02-08T12:30:00Z"
+  },
+  {
+    "Id": 8,
+    "contactId": 2,
+    "title": "Research competitor pricing for market positioning",
+    "dueDate": "2024-02-15",
+    "completed": true,
+    "createdAt": "2024-02-07T10:45:00Z"
+  },
+  {
+    "Id": 9,
+    "contactId": 3,
+    "title": "Follow up on budget approval status",
+    "dueDate": "2024-02-12",
+    "completed": false,
+    "createdAt": "2024-02-06T15:20:00Z"
+  },
+  {
+    "Id": 10,
+    "contactId": 4,
+    "title": "Connect with procurement team for vendor requirements",
+    "dueDate": "2024-02-22",
+    "completed": false,
+    "createdAt": "2024-02-05T09:15:00Z"
+  }
+]

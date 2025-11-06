@@ -1,0 +1,66 @@
+@import 'react-toastify/dist/ReactToastify.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-secondary font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface rounded-lg shadow-md border border-gray-100 p-6;
+  }
+  
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-blue-700 focus:ring-primary;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 text-secondary hover:bg-gray-200 focus:ring-gray-500;
+  }
+  
+  .btn-ghost {
+    @apply text-secondary hover:bg-gray-100 focus:ring-gray-500;
+  }
+}
+
+.Toastify__toast-container {
+  @apply z-[9999];
+}
+
+.Toastify__toast {
+  @apply rounded-lg shadow-lg font-sans;
+}
+
+.Toastify__toast--success {
+  @apply bg-success;
+}
+
+.Toastify__toast--error {
+  @apply bg-error;
+}
+
+.Toastify__toast--info {
+  @apply bg-info;
+}
+
+.Toastify__toast--warning {
+  @apply bg-warning;
+}
+
+.Toastify__progress-bar {
+  @apply bg-white bg-opacity-30;
+}

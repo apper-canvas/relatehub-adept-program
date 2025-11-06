@@ -1,0 +1,68 @@
+[
+  {
+    "Id": 1,
+    "name": "Sarah Johnson",
+    "company": "TechCorp Solutions",
+    "email": "sarah.johnson@techcorp.com",
+    "phone": "(555) 123-4567",
+    "tags": ["enterprise", "tech", "high-priority"],
+    "notes": "Interested in our enterprise package. Follow up next week about implementation timeline.",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-20T14:45:00Z"
+  },
+  {
+    "Id": 2,
+    "name": "Michael Chen",
+    "company": "Digital Marketing Pro",
+    "email": "m.chen@digitalmarketingpro.com",
+    "phone": "(555) 234-5678",
+    "tags": ["marketing", "small-business", "warm-lead"],
+    "notes": "Looking for automation tools to streamline client reporting. Budget approved for Q2.",
+    "createdAt": "2024-01-18T09:15:00Z",
+    "updatedAt": "2024-01-25T11:20:00Z"
+  },
+  {
+    "Id": 3,
+    "name": "Emily Rodriguez",
+    "company": "StartupHub Inc",
+    "email": "emily.r@startuphub.co",
+    "phone": "(555) 345-6789",
+    "tags": ["startup", "growth", "referral"],
+    "notes": "Referred by John Smith. Needs scalable solution for growing team. Price sensitive but high potential.",
+    "createdAt": "2024-01-22T16:00:00Z",
+    "updatedAt": "2024-01-28T13:30:00Z"
+  },
+  {
+    "Id": 4,
+    "name": "David Thompson",
+    "company": "Global Manufacturing Co",
+    "email": "d.thompson@globalmfg.com",
+    "phone": "(555) 456-7890",
+    "tags": ["manufacturing", "enterprise", "decision-maker"],
+    "notes": "Head of Operations. Looking to modernize legacy systems. Large budget, long sales cycle expected.",
+    "createdAt": "2024-01-25T08:45:00Z",
+    "updatedAt": "2024-02-01T10:15:00Z"
+  },
+  {
+    "Id": 5,
+    "name": "Lisa Park",
+    "company": "Creative Design Studio",
+    "email": "lisa@creativedesign.io",
+    "phone": "(555) 567-8901",
+    "tags": ["design", "creative", "collaboration-tools"],
+    "notes": "Creative director seeking better project management and client collaboration tools. Team of 15 designers.",
+    "createdAt": "2024-02-02T12:20:00Z",
+    "updatedAt": "2024-02-05T15:45:00Z"
+  },
+  {
+    "Id": 6,
+    "name": "Robert Kim",
+    "company": "Financial Advisors Group",
+    "email": "r.kim@financialadvisors.net",
+    "phone": "(555) 678-9012",
+    "tags": ["finance", "compliance", "security-focused"],
+    "notes": "Senior partner concerned about data security and compliance. Requires SOC 2 certification.",
+    "createdAt": "2024-02-08T14:10:00Z",
+    "updatedAt": "2024-02-12T09:25:00Z"
+  }
+]
